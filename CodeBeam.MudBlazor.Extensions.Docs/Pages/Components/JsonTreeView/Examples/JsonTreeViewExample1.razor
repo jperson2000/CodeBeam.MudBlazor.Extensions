@@ -2,37 +2,40 @@
 @using MudBlazor.Utilities
 
 <MudGrid>
-    <MudItem xs="12" sm="8" Class="d-flex align-center flex-wrap">
-        <MudJsonTreeView Json="@Json">
+    <MudItem lg="6" sm="12" Class="d-flex align-center flex-wrap">
+        <MudJsonTreeView Json="@Json" Dense="@Dense">
 
         </MudJsonTreeView>
+    </MudItem>
+    <MudItem lg="6" sm="12" Class="d-flex align-center flex-wrap">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudSwitch @bind-Value="@Dense" Label="Dense" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="@Json" Immediate="false" Lines="20" />
+            </MudItem>
+        </MudGrid>
     </MudItem>
 </MudGrid>
 
 @code
 {
+    bool Dense = true;
     string Json = @"
-{
-    'glossary': {
-        'title': 'example glossary',
-		'GlossDiv': {
-            'title': 'S',
-			'GlossList': {
-                'GlossEntry': {
-                    'ID': 'SGML',
-					'SortAs': 'SGML',
-					'GlossTerm': 'Standard Generalized Markup Language',
-					'Acronym': 'SGML',
-					'Abbrev': 'ISO 8879:1986',
-					'GlossDef': {
-                        'para': 'A meta-markup language, used to create markup languages such as DocBook.',
-						'GlossSeeAlso': ['GML', 'XML']
-                    },
-					'GlossSee': 'markup'
-                }
-            }
-        }
-    }
-}
-";
+    {
+      'PatientRecordType': 'v4.0.8',
+      'DoctorId': '8F704CD5-3CCE-4CC0-957C-2BC98DC06E42',
+      'PatientId': '0000-0002-6',
+      'Birthdate': '1980-02-15T00:00:00Z',
+      'UpdateDate': '2023-02-14T07:12:27.2502767-05:00',
+      'Races': [
+        'Vietnamese',
+        'Caucasian'
+      ],
+      'Status': 'AV',
+      'Gender': 'M',
+      'Active': true,
+      'Type': 'Normal'
+    }".Replace("'", "\"");
 }
