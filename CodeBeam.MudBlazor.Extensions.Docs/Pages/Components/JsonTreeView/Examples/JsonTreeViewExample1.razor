@@ -1,0 +1,38 @@
+﻿@namespace MudExtensions.Docs.Examples
+@using MudBlazor.Utilities
+
+<MudGrid>
+    <MudItem xs="12" sm="8" Class="d-flex align-center flex-wrap">
+        <MudJsonTreeView Json="@Json">
+
+        </MudJsonTreeView>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    string Json = @"
+{
+    'glossary': {
+        'title': 'example glossary',
+		'GlossDiv': {
+            'title': 'S',
+			'GlossList': {
+                'GlossEntry': {
+                    'ID': 'SGML',
+					'SortAs': 'SGML',
+					'GlossTerm': 'Standard Generalized Markup Language',
+					'Acronym': 'SGML',
+					'Abbrev': 'ISO 8879:1986',
+					'GlossDef': {
+                        'para': 'A meta-markup language, used to create markup languages such as DocBook.',
+						'GlossSeeAlso': ['GML', 'XML']
+                    },
+					'GlossSee': 'markup'
+                }
+            }
+        }
+    }
+}
+";
+}

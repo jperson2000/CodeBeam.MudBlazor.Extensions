@@ -31,4 +31,9 @@
 		<EmbeddedResource Include="Pages/Components/**" />
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <Content Remove="Pages\Components\JsonTreeView\Examples\JsonTreeViewExample1.razor" />
+	  <Content Remove="Pages\Components\JsonTreeView\JsonTreeViewPage.razor" />
+	</ItemGroup>
+	
 </Project>
