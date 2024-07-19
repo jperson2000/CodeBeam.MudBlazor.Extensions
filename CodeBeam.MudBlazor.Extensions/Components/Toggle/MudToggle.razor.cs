@@ -5,6 +5,9 @@ using MudBlazor.Utilities;
 
 namespace MudExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class MudToggle : MudComponentBase
     {
         /// <summary>
@@ -48,7 +51,7 @@ namespace MudExtensions
                     return;
                 }
                 _toggled = value;
-                ToggledChanged.InvokeAsync().AndForget();
+                ToggledChanged.InvokeAsync().CatchAndLog();
             }
         }
 

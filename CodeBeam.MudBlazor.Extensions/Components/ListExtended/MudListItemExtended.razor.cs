@@ -39,7 +39,7 @@ namespace MudExtensions
           .AddClass("mud-list-item-gutters-extended", Gutters && (MudListExtended?.Gutters == true))
           .AddClass("mud-list-item-clickable-extended", MudListExtended?.Clickable)
           .AddClass("mud-ripple", MudListExtended?.Clickable == true && Ripple && !GetDisabledStatus() && !IsFunctional)
-          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && MudListExtended?.DisableSelectedItemStyle == false)
+          .AddClass($"mud-selected-item mud-{MudListExtended?.Color.ToDescriptionString()}-text mud-{MudListExtended?.Color.ToDescriptionString()}-hover", _selected && !GetDisabledStatus() && NestedList == null && MudListExtended?.EnableSelectedItemStyle == true)
           .AddClass("mud-list-item-hilight-extended", _active && !GetDisabledStatus() && NestedList == null && !IsFunctional)
           .AddClass("mud-list-item-disabled-extended", GetDisabledStatus())
           .AddClass("mud-list-item-nested-background-extended", MudListExtended != null && MudListExtended.SecondaryBackgroundForNestedItemHeader && NestedList != null)
@@ -399,7 +399,7 @@ namespace MudExtensions
 
             if (OnClickHandlerPreventDefault)
             {
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
                 return;
             }
 
@@ -410,13 +410,13 @@ namespace MudExtensions
             else if (Href != null)
             {
                 MudListExtended?.SetSelectedValue(this);
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
                 NavigationManager?.NavigateTo(Href, ForceLoad);
             }
             else if (MudListExtended?.Clickable == true || MudListExtended?.MultiSelection == true)
             {
                 MudListExtended?.SetSelectedValue(this);
-                OnClick.InvokeAsync(ev).AndForget();
+                OnClick.InvokeAsync(ev).CatchAndLog();
             }
         }
 
@@ -426,7 +426,7 @@ namespace MudExtensions
         /// <param name="ev"></param>
         protected void OnlyOnClick(MouseEventArgs ev)
         {
-            OnClick.InvokeAsync(ev).AndForget();
+            OnClick.InvokeAsync(ev).CatchAndLog();
         }
 
         private Typo _textTypo;

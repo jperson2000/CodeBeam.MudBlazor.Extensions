@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
+using MudBlazor.State;
 
 namespace MudExtensions
 {
@@ -10,25 +11,25 @@ namespace MudExtensions
     public partial class MudLoadingButton : MudBaseButton
     {
 
-        bool _loading = true;
+        /// <summary>
+        /// MudLoadingButton constructor.
+        /// </summary>
+        public MudLoadingButton()
+        {
+            using var registerScope = CreateRegisterScope();
+            _loading = registerScope.RegisterParameter<bool>(nameof(Loading))
+                .WithParameter(() => Loading)
+                .WithEventCallback(() => LoadingChanged);
+        }
+
+        private readonly ParameterState<bool> _loading;
+
         /// <summary>
         /// Two way binded loading state.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.Behavior)]
-        public bool Loading 
-        { 
-            get => _loading; 
-            set
-            {
-                if (_loading == value)
-                {
-                    return;
-                }
-                _loading = value;
-                LoadingChanged.InvokeAsync(_loading).AndForget();
-            }
-        }
+        public bool Loading { get; set; }
 
         /// <summary>
         /// Fires when loading changed.
@@ -107,13 +108,6 @@ namespace MudExtensions
         public ButtonVariant ButtonVariant { get; set; } = ButtonVariant.Button;
 
         /// <summary>
-        /// Title of the icon used for accessibility. Only for IconButton and Fab variants.
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.Button.Behavior)]
-        public string? Title { get; set; }
-
-        /// <summary>
         /// The variant to use.
         /// </summary>
         [Parameter]
@@ -173,10 +167,10 @@ namespace MudExtensions
             if (AutoDelay != null)
             {
                 Task task = Task.Delay(AutoDelay.Value);
-                _loading = true;
+                await _loading.SetValueAsync(true);
                 await OnClickHandler(args);
                 await task;
-                _loading = false;
+                await _loading.SetValueAsync(false);
             }
             else
             {

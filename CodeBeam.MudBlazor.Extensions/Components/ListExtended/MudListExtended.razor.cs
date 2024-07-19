@@ -330,7 +330,7 @@ namespace MudExtensions
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableSelectedItemStyle { get; set; }
+        public bool EnableSelectedItemStyle { get; set; } = true;
 
         /// <summary>
         /// If true, compact vertical padding will be applied to all list items.
@@ -535,7 +535,7 @@ namespace MudExtensions
 
                 _selectedValue = value;
                 HandleCentralValueCommander(nameof(SelectedValue));
-                SelectedValueChanged.InvokeAsync(_selectedValue).AndForget();
+                SelectedValueChanged.InvokeAsync(_selectedValue).CatchAndLog();
             }
         }
 
@@ -588,7 +588,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedValues));
-                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T?>(SelectedValues, _comparer)).AndForget();
+                SelectedValuesChanged.InvokeAsync(SelectedValues == null ? null : new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
             }
         }
 
@@ -617,7 +617,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedItem));
-                SelectedItemChanged.InvokeAsync(_selectedItem).AndForget();
+                SelectedItemChanged.InvokeAsync(_selectedItem).CatchAndLog();
             }
         }
 
@@ -652,7 +652,7 @@ namespace MudExtensions
                     return;
                 }
                 HandleCentralValueCommander(nameof(SelectedItems));
-                SelectedItemsChanged.InvokeAsync(_selectedItems).AndForget();
+                SelectedItemsChanged.InvokeAsync(_selectedItems).CatchAndLog();
             }
         }
 
@@ -716,7 +716,7 @@ namespace MudExtensions
                 return Task.CompletedTask;
             }
 
-            base.SetParametersAsync(parameters).AndForget();
+            base.SetParametersAsync(parameters).CatchAndLog();
 
             _setParametersDone = true;
             return Task.CompletedTask;
@@ -1295,6 +1295,7 @@ namespace MudExtensions
         /// <param name="deselect"></param>
         protected void SelectAllItems(bool? deselect = false)
         {
+            // Select all the components currently rendered
             var items = CollectAllMudListItems(true);
             if (deselect == true)
             {
@@ -1322,7 +1323,20 @@ namespace MudExtensions
             var selectedItems = items.Where(x => x.IsSelected).Select(y => y.Value).ToHashSet(_comparer);
             if (ItemCollection != null)
             {
-                SelectedValues = deselect == true ? Enumerable.Empty<T?>() : selectedItems;
+                var searchedItems = GetSearchedItems();
+                // Without virtualization, we are sure that selectedItems will reflect the correct
+                // state after the select/deselect all
+
+                // With virtualization, we can't make that assumption. selectedItems only contains the
+                // rendered items
+                if (Virtualize && deselect is null or false && searchedItems != null && searchedItems.Count != selectedItems.Count)
+                {
+                    SelectedValues = searchedItems.ToHashSet(_comparer);
+                }
+                else
+                {
+                    SelectedValues = deselect == true ? Enumerable.Empty<T?>() : selectedItems;
+                }
             }
             else
             {

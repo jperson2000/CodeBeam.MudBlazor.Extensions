@@ -2,14 +2,14 @@
 
 <MudGrid>
     <MudItem xs="12" sm="8" Class="d-flex flex-column gap-8 align-center justify-center" Style="height: 500px">
-        <MudCodeInput @ref="_textFieldGroup" T="string" @bind-Value="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" Margin="_margin"
-            Disabled="@_disabled" ReadOnly="@_readonly" />
+        <MudCodeInput T="string" @bind-Value="@_value" Count="@_count" Spacing="_spacing" Variant="@_variant" Margin="_margin"
+                      Disabled="@_disabled" ReadOnly="@_readonly" />
     </MudItem>
 
     <MudItem xs="12" sm="4">
-        <MudStack Spacing="4">
+        <MudStack Spacing="2">
             <MudText>Value: @_value</MudText>
-            <MudTextField @bind-Value="@_value" Immediate="true" Label="Two Way Bind Controller" />
+            <MudTextField @bind-Value="@_value" Immediate="true" Label="Two Way Bind Controller" Variant="Variant.Outlined" />
             <MudNumericField @bind-Value="_count" Label="Count" Variant="Variant.Outlined" />
             <MudNumericField @bind-Value="_spacing" Label="Spacing" Variant="Variant.Outlined" />
             <MudSelect @bind-Value="_variant" Variant="Variant.Outlined" Label="Variant">
@@ -24,14 +24,13 @@
                     <MudSelectItem Value="item">@item.ToDescriptionString()</MudSelectItem>
                 }
             </MudSelect>
-            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Primary" />
-            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Primary" />
+            <MudSwitchM3 @bind-Value="@_disabled" Label="Disabled" Color="Color.Secondary" />
+            <MudSwitchM3 @bind-Value="@_readonly" Label="ReadOnly" Color="Color.Secondary" />
         </MudStack>
     </MudItem>
 </MudGrid>
 
-@code{
-    MudCodeInput<string>? _textFieldGroup;
+@code {
     string? _value;
     int _count = 4;
     int _spacing = 2;

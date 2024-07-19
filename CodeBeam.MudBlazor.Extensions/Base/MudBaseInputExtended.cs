@@ -50,6 +50,16 @@ namespace MudExtensions
         protected bool GetReadOnlyState() => ReadOnly || ParentReadOnly;
 
         /// <summary>
+        /// Fires on input.
+        /// </summary>
+        [Parameter] public EventCallback OnInput { get; set; }
+
+        /// <summary>
+        /// Fires on change.
+        /// </summary>
+        [Parameter] public EventCallback OnChange { get; set; }
+
+        /// <summary>
         /// If true, the input will take up the full width of its container.
         /// </summary>
         [Parameter]
@@ -476,7 +486,7 @@ namespace MudExtensions
         {
             var changed = base.SetConverter(value);
             if (changed)
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
 
             return changed;
         }
@@ -490,7 +500,7 @@ namespace MudExtensions
         {
             var changed = base.SetCulture(value);
             if (changed)
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
 
             return changed;
         }
@@ -517,7 +527,7 @@ namespace MudExtensions
             if (changed)
             {
                 ((Converter<T>)Converter).Format = value;
-                UpdateTextPropertyAsync(false).AndForget();      // refresh only Text property from current Value
+                UpdateTextPropertyAsync(false).CatchAndLog();      // refresh only Text property from current Value
             }
             return changed;
         }

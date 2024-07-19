@@ -164,18 +164,18 @@ namespace MudExtensions
         public string? PopoverClass { get; set; }
 
         /// <summary>
-        /// User class names for the popover, separated by space
+        /// 
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public bool DisablePopoverPadding { get; set; }
+        public bool EnablePopoverPadding { get; set; } = true;
 
         /// <summary>
         /// If true, selected items doesn't have a selected background color.
         /// </summary>
         [Parameter]
         [Category(CategoryTypes.List.Appearance)]
-        public bool DisableSelectedItemStyle { get; set; }
+        public bool EnableSelectedItemStyle { get; set; } = true;
 
         /// <summary>
         /// 
@@ -440,7 +440,7 @@ namespace MudExtensions
                 if (value != _multiSelection)
                 {
                     _multiSelection = value;
-                    UpdateTextPropertyAsync(false).AndForget();
+                    UpdateTextPropertyAsync(false).CatchAndLog();
                 }
             }
         }
@@ -544,15 +544,15 @@ namespace MudExtensions
                 SelectionChangedFromOutside?.Invoke(new HashSet<T?>(_selectedValues, _comparer));
                 if (!MultiSelection)
                 {
-                    SetValueAsync(_selectedValues.FirstOrDefault()).AndForget();
+                    SetValueAsync(_selectedValues.FirstOrDefault()).CatchAndLog();
                 }
                 else
                 {
-                    SetValueAsync(_selectedValues.LastOrDefault(), false).AndForget();
-                    UpdateTextPropertyAsync(false).AndForget();
+                    SetValueAsync(_selectedValues.LastOrDefault(), false).CatchAndLog();
+                    UpdateTextPropertyAsync(false).CatchAndLog();
                 }
 
-                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).AndForget();
+                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
                 _selectedValuesSetterStarted = false;
                 //Console.WriteLine("SelectedValues setter ended");
             }
@@ -646,7 +646,7 @@ namespace MudExtensions
         {
             // For MultiSelection of non-string T's we don't update the Value!!!
             //if (typeof(T) == typeof(string) || !MultiSelection)
-            base.UpdateValuePropertyAsync(updateText).AndForget();
+            base.UpdateValuePropertyAsync(updateText).CatchAndLog();
             return Task.CompletedTask;
         }
 
@@ -739,7 +739,7 @@ namespace MudExtensions
             else if (MultiSelection && SelectedValues != null)
             {
                 // TODO: Check this line again
-                SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
+                SetValueAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
             }
         }
 
@@ -1073,7 +1073,7 @@ namespace MudExtensions
 
                 await SetValueAsync(value);
                 //await UpdateTextPropertyAsync(false);
-                _elementReference.SetText(Text).AndForget();
+                _elementReference.SetText(Text).CatchAndLog();
                 //_selectedValues.Clear();
                 //_selectedValues.Add(value);
             }

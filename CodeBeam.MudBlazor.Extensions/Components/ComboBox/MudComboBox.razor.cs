@@ -123,10 +123,10 @@ namespace MudExtensions
         [Parameter] public bool Editable { get; set; }
 
         /// <summary>
-        /// If true, all items are eligible regarding what user search in textfield.
+        /// If false, all items are eligible regarding what user search in textfield.
         /// </summary>
         [Category(CategoryTypes.FormComponent.Appearance)]
-        [Parameter] public bool DisableFilter { get; set; }
+        [Parameter] public bool EnableFilter { get; set; } = true;
 
         /// <summary>
         /// If true, searched text has highlight.
@@ -246,13 +246,6 @@ namespace MudExtensions
         [Parameter]
         [Category(CategoryTypes.FormComponent.ListAppearance)]
         public string? PopoverClass { get; set; }
-
-        /// <summary>
-        /// User class names for the popover, separated by space
-        /// </summary>
-        [Parameter]
-        [Category(CategoryTypes.FormComponent.ListAppearance)]
-        public bool DisablePopoverPadding { get; set; }
 
         /// <summary>
         /// The text that shown on empty searchbox.
@@ -644,8 +637,8 @@ namespace MudExtensions
 
                 _selectedValues = new HashSet<T?>(set, _comparer);
 
-                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).AndForget();
-                ForceUpdateItems().AndForget();
+                SelectedValuesChanged.InvokeAsync(new HashSet<T?>(SelectedValues, _comparer)).CatchAndLog();
+                ForceUpdateItems().CatchAndLog();
                 //Console.WriteLine("SelectedValues setter ended");
             }
         }
@@ -775,7 +768,7 @@ namespace MudExtensions
             else if (MultiSelection && SelectedValues != null)
             {
                 // TODO: Check this line again
-                SetValueAsync(SelectedValues.FirstOrDefault()).AndForget();
+                SetValueAsync(SelectedValues.FirstOrDefault()).CatchAndLog();
             }
 
         }
