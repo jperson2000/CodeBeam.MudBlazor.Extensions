@@ -3,17 +3,15 @@
 
 <MudGrid>
     <MudItem lg="6" sm="12" Class="d-flex align-center flex-wrap">
-        <MudJsonTreeView Json="@Json" Dense="@Dense">
-
-        </MudJsonTreeView>
+        <MudJsonTreeView Json="@_json" Dense="@_dense" />
     </MudItem>
     <MudItem lg="6" sm="12" Class="d-flex align-center flex-wrap">
         <MudGrid>
             <MudItem xs="12">
-                <MudSwitch @bind-Value="@Dense" Label="Dense" />
+                <MudSwitchM3 @bind-Value="@_dense" Label="Dense" Color="Color.Secondary" />
             </MudItem>
             <MudItem xs="12">
-                <MudTextField @bind-Value="@Json" Immediate="false" Lines="20" />
+                <MudTextField @bind-Value="@_json" Lines="20" Label="Json Data" Variant="Variant.Outlined" />
             </MudItem>
         </MudGrid>
     </MudItem>
@@ -21,8 +19,8 @@
 
 @code
 {
-    bool Dense = true;
-    string Json = @"
+    bool _dense = true;
+    string? _json = @"
     {
       'PatientRecordType': 'v4.0.8',
       'DoctorId': '8F704CD5-3CCE-4CC0-957C-2BC98DC06E42',
